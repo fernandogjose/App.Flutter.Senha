@@ -1,7 +1,7 @@
 import 'package:app/controllers/home.controller.dart';
-import 'package:app/controllers/senha.controller.dart';
 import 'package:app/themes/claro.theme.dart';
 import 'package:app/views/pages/login.page.dart';
+import 'package:app/views/pages/senha.adicionar.page.dart';
 import 'package:app/views/widgets/menu-lateral.widget.dart';
 import 'package:app/views/widgets/senha-lista.widget.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,14 @@ class HomePage extends StatelessWidget {
         title: new Text("Minhas Senhas"),
       ),
       drawer: new Drawer(child: MenuLateral()),
-      body: SenhaLista(),
+      body: SenhaListaWidget(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          navegarParaSenhasAdicionar(context);
+        },
+        child: Icon(Icons.add_rounded),
+        backgroundColor: ClaroTheme.corPrimaria,
+      ),
     );
   }
 
@@ -34,9 +41,13 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  HomeController obterHomeController(BuildContext context) {
-    HomeController controller = Provider.of<HomeController>(context, listen: false);
-    return controller;
+  void navegarParaSenhasAdicionar(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SenhaAdicionarPage(),
+      ),
+    );
   }
 
   void usuarioLogado(BuildContext context) async {
@@ -45,5 +56,10 @@ class HomePage extends StatelessWidget {
     if (!estaLogado) {
       navegarParaLogin(context);
     }
+  }
+
+  HomeController obterHomeController(BuildContext context) {
+    HomeController controller = Provider.of<HomeController>(context, listen: false);
+    return controller;
   }
 }

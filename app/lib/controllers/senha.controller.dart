@@ -13,4 +13,22 @@ class SenhaController extends ChangeNotifier {
       return null;
     }
   }
+
+  Future<int> adicionar(SenhaModel request) async {
+    try {
+      final int response = await senhaDatabase.adicionar(request);
+      return response;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  Future<int> remover(SenhaModel request) async {
+    try {
+      final int response = await senhaDatabase.remover(request);
+      return response;
+    } catch (e) {
+      return 0;
+    }
+  }
 }

@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-class SenhaLista extends StatefulWidget {
+class SenhaListaWidget extends StatefulWidget {
   @override
-  _SenhaListaState createState() => _SenhaListaState();
+  _SenhaListaWidgetState createState() => _SenhaListaWidgetState();
 }
 
-class _SenhaListaState extends State<SenhaLista> {
+class _SenhaListaWidgetState extends State<SenhaListaWidget> {
   List<SenhaModel> senhas;
   List<UsuarioModel> usuarios;
 
@@ -26,19 +26,27 @@ class _SenhaListaState extends State<SenhaLista> {
   }
 
   Widget lista() {
-    return ListView.separated(
-      itemCount: senhas.length,
-      separatorBuilder: (BuildContext context, int index) => Divider(
-        color: ClaroTheme.corPrimariaClaro,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        final SenhaModel senha = senhas[index];
+    return Container(
+      child: ListView.separated(
+        itemCount: senhas.length,
+        separatorBuilder: (BuildContext context, int index) => Divider(
+          color: ClaroTheme.corPrimariaClaro,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          final SenhaModel senha = senhas[index];
 
-        return ListTile(
-          title: Text(senha.site),
-          subtitle: Text(senha.login),
-        );
-      },
+          return ListTile(
+            title: Text(senha.site),
+            subtitle: Text(senha.login + ' --- ' + senha.senha),
+            trailing: new IconButton(
+              icon: new Icon(Icons.remove_circle, color: Colors.red[900]),
+              onPressed: () {
+                remover(senha.site, senha.login, senha.senha);
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -53,5 +61,12 @@ class _SenhaListaState extends State<SenhaLista> {
     setState(() {
       this.senhas = listarResponse;
     });
+  }
+
+  void remover(String site, String login, String senha) async {
+    final SenhaModel senhaModelRequest = new SenhaModel(site: site, login: login, senha: senha);
+    SenhaController controller = obterSenhaController(context);
+    await controller.remover(senhaModelRequest);
+    listarSenhas(context);
   }
 }
